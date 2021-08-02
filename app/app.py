@@ -1,10 +1,17 @@
-from flask import Flask, make_response, request, jsonify, render_template
 import simplejson as json
+from flask import (
+    Flask,
+    render_template,
+    redirect
+)
+from flask import current_app as app
+from flask import request
 from flaskext.mysql import MySQL
 from pymysql.cursors import DictCursor
-from flask import current_app as app
+from forms import ContactForm
 
 app = Flask(__name__, template_folder="templates")
+app.config.from_object('config.Config')
 mysql = MySQL(cursorclass=DictCursor)
 
 app.config['MYSQL_DATABASE_HOST'] = 'db'
@@ -13,6 +20,17 @@ app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
 app.config['MYSQL_DATABASE_PORT'] = 3306
 app.config['MYSQL_DATABASE_DB'] = 'oscarData'
 mysql.init_app(app)
+
+@app.route("/contact", methods=["GET", "POST"])
+def contact():
+    form = ContactForm()
+    if form.validate_on_submit():
+        return redirect(url_for("success"))
+    return render_template(
+        "forms",
+        form=form,
+        template="form-template"
+    )
 
 
 @app.route('/')
@@ -25,7 +43,7 @@ def home():
     return render_template[
         'home.html',
         nav=nav
-        title="Oscar Reward",
+        title="Welcome to My Site!",
         description="List of Oscar Reward Movies and Actors."
     ]
 
