@@ -15,6 +15,15 @@ app.config['MYSQL_DATABASE_DB'] = 'oscarData'
 mysql.init_app(app)
 
 
+@app.route('/')
+def home():
+    return render_template(
+        'home.html',
+        title="Oscar Reward",
+        description="List of Oscar Reward Movies and Actors."
+    )
+
+
 @app.route('/', methods=['GET'])
 def index():
     user = {'username': 'Tianqi'}
