@@ -2,16 +2,9 @@ from flask import Flask, make_response, request, jsonify, render_template
 import simplejson as json
 from flaskext.mysql import MySQL
 from pymysql.cursors import DictCursor
+from flask import current_app as app
 
-app = Flask(__name__)
-
-
-@app.route("/")
-def hello():
-    return "Hello World!"
-
-
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 mysql = MySQL(cursorclass=DictCursor)
 
 app.config['MYSQL_DATABASE_HOST'] = 'db'
