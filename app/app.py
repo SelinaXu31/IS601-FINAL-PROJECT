@@ -35,6 +35,24 @@ app.config['MYSQL_DATABASE_PORT'] = 3306
 app.config['MYSQL_DATABASE_DB'] = 'oscarData'
 mysql.init_app(app)
 
+@app.route('/', methods=['GET'])
+def user_records():
+    """Create a user via query string parameters."""
+    username = request.args.get('user')
+    email = request.args.get('email')
+    if username and email:
+        new_user = User(
+            username=username,
+            email=email,
+            created=dt.now(),
+            bio="In West Philadelphia born and raised, \
+            on the playground is where I spent most of my days",
+            admin=False
+        )
+        db.session.add(new_user)  # Adds new User record to database
+        db.session.commit()  # Commits all changes
+    return make_response(f"{new_user} successfully created!")
+
 @app.errorhandler(404)
 def not_found():
     """Page not found."""
