@@ -6,8 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 assets = Environment()
 db = SQLAlchemy()
 
+
 def init_app():
-    """Construct the core application."""
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object('config.Config')
 
@@ -19,18 +19,31 @@ def init_app():
 
         return app
 
+
 def create_app():
-    """Construct the core application."""
     app = Flask(__name__, instance_relative_config=False)
+
+    # Application Configuration
     app.config.from_object('config.Config')
 
-    assets.init_app(app)
+    # Initialize Plugins
+    db.init_app(app)
+    login_manager.init_app(app)
 
     with app.app_context():
-        from .admin import routes
-        from .main importn routes
-        app.register_blueprint(admin_routes.admin_bp)
-        app.register_blueprint(main_routes.main_bp)
-        compile_assets(assets)
+        from . import routes
+        from . import auth
+        from .assets import compile_assets
+
+        # Register Blueprints
+        app.register_blueprint(routes.main_bp)
+        app.register_blueprint(auth.auth_bp)
+
+        # Create Database Models
+        db.create_all()
+
+        # Compile static assets
+        if app.config['FLASK_ENV'] == 'development':
+            compile_assets(app)
 
         return app
