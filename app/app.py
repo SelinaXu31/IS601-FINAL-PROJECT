@@ -17,8 +17,14 @@ mysql.init_app(app)
 
 @app.route('/')
 def home():
+    nav = [
+        {'name': 'Home', 'url': 'https://example.com/1'},
+        {'name': 'About', 'url': 'https://example.com/2'},
+        {'name': 'Pics', 'url': 'https://example.com/3'}
+    ]
     return render_template(
         'home.html',
+        nav=nav
         title="Oscar Reward",
         description="List of Oscar Reward Movies and Actors."
     )
