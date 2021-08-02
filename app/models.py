@@ -2,43 +2,55 @@ from . import db
 
 
 class User(db.Model):
-    """Data model for user accounts."""
 
-    __tablename__ = 'flasksqlalchemy-tutorial-users'
+    __tablename__ = 'flasklogin-users'
     id = db.Column(
         db.Integer,
         primary_key=True
     )
-    username = db.Column(
-        db.String(64),
-        index=False,
-        unique=True,
-        nullable=False
+    name = db.Column(
+        db.String(100),
+        nullable=False,
+        unique=False
     )
     email = db.Column(
-        db.String(80),
-        index=True,
+        db.String(40),
         unique=True,
         nullable=False
     )
-    created = db.Column(
-        db.DateTime,
-        index=False,
+    password = db.Column(
+        db.String(200),
+        primary_key=False,
         unique=False,
         nullable=False
     )
-    bio = db.Column(
-        db.Text,
+    website = db.Column(
+        db.String(60),
         index=False,
         unique=False,
         nullable=True
     )
-    admin = db.Column(
-        db.Boolean,
+    created_on = db.Column(
+        db.DateTime,
         index=False,
         unique=False,
-        nullable=False
+        nullable=True
     )
+    last_login = db.Column(
+        db.DateTime,
+        index=False,
+        unique=False,
+        nullable=True
+    )
+
+    def set_password(self, password):
+        self.password = generate_password_hash(
+            password,
+            method='sha256'
+        )
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
