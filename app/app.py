@@ -11,8 +11,10 @@ from pymysql.cursors import DictCursor
 from forms import ContactForm, SignupForm
 
 app = Flask(__name__, template_folder="templates")
-app.config.from_object('config.Config')
+app.config.from_object('config.DevConfig')
+app.config.from_pyfile('config.py')
 mysql = MySQL(cursorclass=DictCursor)
+
 
 app.config['MYSQL_DATABASE_HOST'] = 'db'
 app.config['MYSQL_DATABASE_USER'] = 'root'
