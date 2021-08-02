@@ -9,12 +9,24 @@ from flask import request
 from flaskext.mysql import MySQL
 from pymysql.cursors import DictCursor
 from forms import ContactForm, SignupForm
+from flask_assets import Environment
 
-app = Flask(__name__, template_folder="templates")
+app = Flask(__name__, instance_relative_config=False)
 app.config.from_object('config.DevConfig')
 app.config.from_pyfile('config.py')
+assets = Environment(app)
 mysql = MySQL(cursorclass=DictCursor)
 
+style_bundle = Bundle(
+    'src/less/*.less',
+    filters='less,cssmin',
+    output='dist/css/style.min.css',
+    extra={'rel': 'stylesheet/css'}
+)
+
+assets.register('main_styles', style_bundle)
+
+style_bundle.build()
 
 app.config['MYSQL_DATABASE_HOST'] = 'db'
 app.config['MYSQL_DATABASE_USER'] = 'root'

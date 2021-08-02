@@ -1,22 +1,22 @@
 from flask import Flask
+from flask_assets import Environment
+from .assets import compile_assets
+
+assets = Environment()
 
 
-def init_app():
+def create_app():
+    """Construct the core application."""
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object('config.Config')
-    assets = Environment()  # Create an assets environment
+
     assets.init_app(app)
 
     with app.app_context():
-        from .profile import profile
-        from .home import home
-        from .products import products
-        from .assets import compile_static_assets
-
-        app.register_blueprint(profile.account_bp)
-        app.register_blueprint(home.home_bp)
-        app.register_blueprint(products.product_bp)
-
-        compile_static_assets(assets)
+        from .admin import routes
+        from .main importn routes
+        app.register_blueprint(admin_routes.admin_bp)
+        app.register_blueprint(main_routes.main_bp)
+        compile_assets(assets)
 
         return app
