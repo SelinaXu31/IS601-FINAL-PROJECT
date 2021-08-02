@@ -22,12 +22,12 @@ def home():
         {'name': 'About', 'url': 'https://example.com/2'},
         {'name': 'Pics', 'url': 'https://example.com/3'}
     ]
-    return render_template(
+    return render_template[
         'home.html',
         nav=nav
         title="Oscar Reward",
         description="List of Oscar Reward Movies and Actors."
-    )
+    ]
 
 
 @app.route('/', methods=['GET'])
